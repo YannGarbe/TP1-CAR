@@ -1,16 +1,12 @@
-package principal;
+package data;
 
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
-
 import exception.PortLesserThan1023Exception;
+import thread.ContextClient;
+import thread.ForceQuitThread;
 
-/**
- * Classe dans laquelle le main est appelé
- * @author Yann Garbé - Valentin Dambrine
- *
- */
 public class Serveur {
 
 	private int port;
@@ -47,20 +43,24 @@ public class Serveur {
 	}
 	
 	public void connection() throws IOException {
-		
+		ForceQuitThread force = new ForceQuitThread(serverSocket);
+		force.run();
 		while(true) {
 			process();
 		}
 	}
 	
-	public void process() throws IOException {
-		//simpleSocket = serverSocket.accept();
-		
+	/**
+	 * Détaille la boucle principale du serveur
+	 * @throws IOException 
+	 */
+	private void process() throws IOException {
+		if(!serverSocket.isClosed()) {
+			simpleSocket = serverSocket.accept();
+			new ContextClient(simpleSocket);
+		} else {
+			System.out.println("MESSAGE : Le serveur est fermé");
+			System.exit(0);
+		}
 	}
-	
-	public static void main (String args[]) {
-		System.out.println("Serveur en construction!");
-	}
-	
-	
 }

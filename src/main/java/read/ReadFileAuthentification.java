@@ -1,7 +1,6 @@
 package read;
 
 import java.io.BufferedReader;
-import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 
@@ -12,33 +11,18 @@ import exception.NonExistentFileException;
  * @author Yann Garbé - Valentin Dambrine
  *
  */
-public class ReadAuthentification {
-
-	private String filename;
+public class ReadFileAuthentification extends ReadFile {
 	
 	/**
 	 * Instancie la classe d'authentification avec le chemin du fichier de la table de login/mot de passe
 	 * @param filename le chemin vers le fichier contenant la table de login/mot de passe
 	 * @throws NonExistentFileException est engendrée si le chemin vers le fichier est invalide
 	 */
-	public ReadAuthentification(String filename) throws NonExistentFileException {
-		File tmp = new File(filename);
-		if (!tmp.exists()) {
-			throw new NonExistentFileException();
-		} else {
-			this.filename = filename;
-		}
+	public ReadFileAuthentification(String filename) throws NonExistentFileException {
+		super(filename);
 		
 	}
 	
-	/**
-	 * Donne le chemin du fichier contenant la table de login/mot de passe
-	 * @return Le chemin du fichier
-	 */
-	public String getPath() {
-		return this.filename;
-	}
-
 	/**
 	 * Déduit si un utilisateur a l'autorisation de se connecter avec le login et le mot de passe donnés.
 	 * @param login le login de l'utilisateur

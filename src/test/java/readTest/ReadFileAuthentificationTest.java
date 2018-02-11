@@ -8,16 +8,16 @@ import org.junit.Before;
 import org.junit.Test;
 
 import exception.NonExistentFileException;
-import read.ReadAuthentification;
+import read.ReadFileAuthentification;
 
 
-public class ReadAuthentificationTest {
+public class ReadFileAuthentificationTest {
 
-	private ReadAuthentification ra;
+	private ReadFileAuthentification ra;
 	
 	@Before
 	public void setUp() throws NonExistentFileException {
-		this.ra = new ReadAuthentification("./configuration/tableLogin.txt");
+		this.ra = new ReadFileAuthentification("./configuration/tableLogin.txt");
 	}
 	
 	@Test
@@ -27,7 +27,7 @@ public class ReadAuthentificationTest {
 
 	@Test(expected=NonExistentFileException.class)
 	public void test_authentification_when_initialisation_failed_because_of_wrong_filename_path() throws NonExistentFileException {
-		new ReadAuthentification("zdadzad");
+		new ReadFileAuthentification("zdadzad");
 	}
 	
 	@Test

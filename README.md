@@ -16,4 +16,4 @@
 
 ## Couverture actuelle des tests 
 
-La couverture actuelle est de 78,4% (car le main n'est pas testé)
+La couverture actuelle est de 60,1%
