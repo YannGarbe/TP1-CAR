@@ -4,19 +4,12 @@ import static org.junit.Assert.*;
 import org.junit.Test;
 
 public class FtpRequestTest {
-
 	
-	@Test
-	public void test_a_supprimer() {
-		assertTrue(true);
-	}
-
-	/*
 	@Test
 	public void test_UserCmd_when_login_is_correct() {
 		fail("Not implemented yet");
 	}
-
+/*
 	@Test
 	public void test_UserCmd_when_login_is_incorrect() {
 		fail("Not implemented yet");
