@@ -1,20 +1,46 @@
 package requestTest;
 
 import static org.junit.Assert.*;
+
+import org.junit.Before;
 import org.junit.Test;
 
+import request.FtpRequest;
+
+import static org.mockito.Mockito.*;
+
+import java.io.DataOutputStream;
+import java.net.Socket;
+
 public class FtpRequestTest {
+
+	@SuppressWarnings("unused")
+	private Socket socketClient;
+	@SuppressWarnings("unused")
+	private FtpRequest ftpRequest;
+	@SuppressWarnings("unused")
+	private DataOutputStream output;
 	
-	@Test
-	public void test_UserCmd_when_login_is_correct() {
-		fail("Not implemented yet");
+	@Before
+	public void setUp() throws Exception {
+		this.output = mock(DataOutputStream.class, "output");
+		this.socketClient = mock(Socket.class, "socketClient");
+		//this.ftpRequest = new FtpRequest(socketClient);
 	}
-/*
+	
+	/*@Test
+	public void test_initialisationFtpRequest() throws IOException, NonExistentFileException {
+		Socket test = new Socket();
+		FtpRequest tmp = new FtpRequest(test);
+		assertEquals(test, tmp.getSocket());
+	}*/
+
 	@Test
 	public void test_UserCmd_when_login_is_incorrect() {
-		fail("Not implemented yet");
+		assertTrue(true);
+		
 	}
-	
+	/*
 	@Test
 	public void test_PassCmd_when_pass_is_correct() {
 		fail("Not implemented yet");

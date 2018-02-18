@@ -8,6 +8,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import exception.*;
+import misc.Constantes;
 import read.ReadFileCodeTable;
 
 public class readFileCodeTableTest {
@@ -17,12 +18,12 @@ public class readFileCodeTableTest {
 	
 	@Before
 	public void setUp() throws NonExistentFileException, IOException {
-		this.rfc = new ReadFileCodeTable("./configuration/tableCode.txt");
+		this.rfc = new ReadFileCodeTable(Constantes.DEFAULT_CODE_PATH);
 	}
 	
 	@Test
 	public void test_authentification_when_initialisation_successfull(){
-		assertEquals("./configuration/tableCode.txt", rfc.getPath());
+		assertEquals(Constantes.DEFAULT_CODE_PATH, rfc.getPath());
 	}
 
 	@Test(expected=NonExistentFileException.class)
@@ -41,4 +42,14 @@ public class readFileCodeTableTest {
 		assertEquals("Not logged in.", s);
 	}
 
+	@Test
+	public void test_printing_code_with_meaning_known_code_number() throws NoCodeFoundException {
+		String s = rfc.getFullCode(200);
+		assertEquals("200 Command okay.\r\n", s);
+	}
+	
+	@Test(expected=NoCodeFoundException.class)
+	public void test_printing_code_with_meaning_unknown_code_number() throws NoCodeFoundException {
+		rfc.getFullCode(666);
+	}
 }

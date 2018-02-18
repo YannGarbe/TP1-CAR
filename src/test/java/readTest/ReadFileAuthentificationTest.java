@@ -8,6 +8,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import exception.NonExistentFileException;
+import misc.Constantes;
 import read.ReadFileAuthentification;
 
 
@@ -17,12 +18,12 @@ public class ReadFileAuthentificationTest {
 	
 	@Before
 	public void setUp() throws NonExistentFileException {
-		this.ra = new ReadFileAuthentification("./configuration/tableLogin.txt");
+		this.ra = new ReadFileAuthentification(Constantes.DEFAULT_LOGIN_PATH);
 	}
 	
 	@Test
 	public void test_authentification_when_initialisation_successfull(){
-		assertEquals("./configuration/tableLogin.txt", ra.getPath());
+		assertEquals(Constantes.DEFAULT_LOGIN_PATH, ra.getPath());
 	}
 
 	@Test(expected=NonExistentFileException.class)

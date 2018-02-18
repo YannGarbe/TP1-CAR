@@ -3,23 +3,28 @@ package data;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
+
 import exception.PortLesserThan1023Exception;
+import misc.Constantes;
 import thread.ContextClient;
-import thread.ForceQuitThread;
+
 
 public class Serveur {
 
 	private int port;
-	private ServerSocket serverSocket ;
+	private ServerSocket serverSocket;
+	private ServerSocket dataServerSocket;
 	private Socket simpleSocket;
 	
-	public Serveur () throws IOException {
-		this.port = 4242;
-		this.serverSocket = new ServerSocket(4242);
+	public Serveur () throws Exception {
+		this.port = Constantes.DEFAULT_PORT;
+		this.serverSocket = new ServerSocket(Constantes.DEFAULT_PORT);
+		this.dataServerSocket = new ServerSocket(Constantes.DEFAULT_PORT+1);
 		this.simpleSocket = new Socket();
+		
 	}
 	
-	public Serveur (int port) throws PortLesserThan1023Exception, IOException {
+	public Serveur (int port) throws Exception {
 		if (port <= 1023) {
 			throw new PortLesserThan1023Exception();
 		}
@@ -37,14 +42,7 @@ public class Serveur {
 		this.simpleSocket.close();
 	}
 	
-	public boolean isConnected () {
-	
-		return simpleSocket.isConnected();
-	}
-	
 	public void connection() throws IOException {
-		ForceQuitThread force = new ForceQuitThread(serverSocket);
-		force.run();
 		while(true) {
 			process();
 		}
@@ -55,9 +53,12 @@ public class Serveur {
 	 * @throws IOException 
 	 */
 	private void process() throws IOException {
+		
 		if(!serverSocket.isClosed()) {
+			
 			simpleSocket = serverSocket.accept();
-			new ContextClient(simpleSocket);
+			
+			new ContextClient(simpleSocket, dataServerSocket);
 		} else {
 			System.out.println("MESSAGE : Le serveur est fermé");
 			System.exit(0);

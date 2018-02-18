@@ -13,13 +13,13 @@ public class ServeurMain {
 
 
 	
-	public static void main (String args[]) {
+	public static void main (String args[]) throws Exception {
 		System.out.println("Lancement du serveur...");
 		Serveur s;
 		try {
 			s = new Serveur();
 			System.out.println("Port : "+s.getPort());
-			System.out.println("Version 0.01");
+			System.out.println("Version 0.65");
 			s.connection();
 		} catch (IOException e) {
 			e.printStackTrace();
