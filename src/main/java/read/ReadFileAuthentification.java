@@ -24,11 +24,18 @@ public class ReadFileAuthentification extends ReadFile {
 	}
 	
 	/**
-	 * Déduit si un utilisateur a l'autorisation de se connecter avec le login et le mot de passe donnés.
-	 * @param login le login de l'utilisateur
-	 * @param pass le mot de passe de l'utilisateur
-	 * @return True si l'utilisateur a l'autorisation de se connecter, False sinon
-	 * @throws IOException est engendrée s'il y a un problème au niveau de la lecture du fichier contenant la table de login/mot de passe
+	 * Déduit si un utilisateur a l'autorisation de se connecter avec le login
+	 * et le mot de passe donnés.
+	 * 
+	 * @param login
+	 *            le login de l'utilisateur
+	 * @param pass
+	 *            le mot de passe de l'utilisateur
+	 * @return True si l'utilisateur a l'autorisation de se connecter, False
+	 *         sinon
+	 * @throws IOException
+	 *             est engendrée s'il y a un problème au niveau de la lecture du
+	 *             fichier contenant la table de login/mot de passe
 	 */
 	public boolean containsUser(String login, String pass) throws IOException {
 		int loginRep = containsLogin(login);

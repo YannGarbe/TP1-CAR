@@ -20,7 +20,7 @@ public class RequestConnectedCWD extends RequestConnected{
 		} else {
 			String s = "";
 			String tmpPath = rd.checkPath(cmd);
-			//System.out.println("     TMPPATH" + tmpPath);
+			
 			if(tmpPath.equals("")) {
 				s = rfc.getFullCode(550);
 			} else {
@@ -34,7 +34,7 @@ public class RequestConnectedCWD extends RequestConnected{
 			writer.flush();
 		}
 		
-		//System.out.println("     CHEMIN NIVEAU FIN CWD" + userPath);
+		
 	}
 
 }

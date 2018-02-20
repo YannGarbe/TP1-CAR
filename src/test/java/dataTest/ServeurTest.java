@@ -2,64 +2,75 @@ package dataTest;
 
 import static org.junit.Assert.*;
 
-import java.io.IOException;
+import java.net.ServerSocket;
 
-import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
+import static org.mockito.Mockito.*;
 import data.Serveur;
+import exception.ClosedServerException;
 import exception.PortLesserThan1023Exception;
-import misc.Constantes;
+import factory.ContextClientFactory;
+import misc.globalData;
 
 public class ServeurTest {
 
 	private Serveur serveur;
+	private ServerSocket mockSocket;
+	private ContextClientFactory mockFac;
 	
-	@Before 
-	public void setUp() throws Exception {
-		this.serveur = new Serveur();
-		
-	}
-
-	@After
-	public void closeServer() throws IOException {
-		serveur.closeServer();
+	@Before
+	public void setUp() {
+		mockSocket = mock(ServerSocket.class, "mockSocket");
+		mockFac = mock(ContextClientFactory.class, "mockFac");
 	}
 	
 	@Test
-	public void test_initialisation_without_given_port() {
-		assertEquals(Constantes.DEFAULT_PORT, this.serveur.getPort());
+	public void test_initialisation_without_given_port_or_serverSocket() throws Exception {
+		this.serveur = new Serveur();
+		assertEquals(globalData.used_port, this.serveur.getPort());
+		this.serveur.closeServer();
 	}
 
+	@Test
+	public void test_initialisation_without_given_port_but_with_serverSocket() throws Exception {
+		this.serveur = new Serveur(mockSocket);
+		assertEquals(globalData.used_port, this.serveur.getPort());
+		this.serveur.closeServer();
+	}
+	
 	@Test
 	public void test_initialisation_with_port_greater_than_1023() throws Exception {
-		Serveur s = new Serveur(5000);
-		assertEquals(5000, s.getPort());
+		this.serveur = new Serveur(5000);
+		assertEquals(5000, serveur.getPort());
+		this.serveur.closeServer();
 	}
 	
 	@Test(expected = PortLesserThan1023Exception.class)
 	public void test_initialisation_with_port_lesser_than_1023() throws Exception {
-		new Serveur(1000);
+		this.serveur = new Serveur(1000);
 	}
 
-	/*@Test
-	public void test_process_server_closed() throws IOException {
+	@Test(expected = ClosedServerException.class)
+	public void test_process_server_closed() throws Exception {
+		when(mockSocket.isClosed()).thenReturn(true);
+		this.serveur = new Serveur(mockSocket);
 		
-		serveur.closeServer();
-		serveur.connection();
-		assertTrue(true);
-		
-	}*/
-	/*@Test
-	public void test_receive_successfull() throws IOException {
-		this.serveur.process();
-		assertTrue(serveur.isConnected());
+		this.serveur.process(mockFac);
 	}
-
+	
 	@Test
-	public void test_receive_failed() {
-		assertTrue(serveur.isConnected());
-	}*/
+	public void test_process_sever_open() throws Exception {
+		when(mockSocket.isClosed()).thenReturn(false);
+		this.serveur = new Serveur(mockSocket);
+		
+		this.serveur.process(mockFac);
+		
+		verify(mockSocket).accept();
+		
+		this.serveur.closeServer();
+	}
+
 
 }

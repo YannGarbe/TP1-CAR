@@ -17,7 +17,6 @@ public class RequestConnectedPWD extends RequestConnected {
 			rfc.printCode(writer, 530);
 		} else {
 			String s = "257 \"" + userPath + "\"\r\n";
-			
 			writer.write(s);
 			writer.flush();
 		}

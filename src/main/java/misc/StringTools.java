@@ -4,10 +4,12 @@ import java.io.File;
 import java.io.IOException;
 import java.util.Date;
 
+import factory.GetOwnerFileFactory;
+
 public class StringTools {
 
 	
-	public static String buildFileDescription(File f) throws IOException {
+	public String buildFileDescription(File f, GetOwnerFileFactory ownerFac) throws IOException {
 		String desc = "";
 		String [] dateTab = new Date(f.lastModified()).toString().split(" ");
 		String [] timeTab = dateTab[3].split(":");
@@ -27,7 +29,7 @@ public class StringTools {
 		//Ajout d'informations supplémentaires
 		
 		
-		desc += " "+java.nio.file.Files.getOwner(f.toPath());
+		desc += " "+ownerFac.getOwnerFile(f);
 		desc += " "+f.length();
 		desc += " "+dateTab[1];
 		desc += " "+dateTab[2];

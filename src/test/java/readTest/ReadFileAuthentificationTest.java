@@ -8,7 +8,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import exception.NonExistentFileException;
-import misc.Constantes;
+import misc.globalData;
 import read.ReadFileAuthentification;
 
 
@@ -18,12 +18,12 @@ public class ReadFileAuthentificationTest {
 	
 	@Before
 	public void setUp() throws NonExistentFileException {
-		this.ra = new ReadFileAuthentification(Constantes.DEFAULT_LOGIN_PATH);
+		this.ra = new ReadFileAuthentification(globalData.DEFAULT_LOGIN_PATH);
 	}
 	
 	@Test
 	public void test_authentification_when_initialisation_successfull(){
-		assertEquals(Constantes.DEFAULT_LOGIN_PATH, ra.getPath());
+		assertEquals(globalData.DEFAULT_LOGIN_PATH, ra.getPath());
 	}
 
 	@Test(expected=NonExistentFileException.class)
@@ -59,5 +59,10 @@ public class ReadFileAuthentificationTest {
 	@Test
 	public void test_containsUser_when_login_and_passWord_are_not_contained_in_file() throws IOException {
 		assertFalse(ra.containsUser("LoginInexistant", "MotDePasseInexistant"));
+	}
+	
+	@Test
+	public void test_containsUser_when_login_is_not_contained_in_file() throws IOException {
+		assertFalse(ra.containsUser("admin", "MotDePasseInexistant"));
 	}
 }

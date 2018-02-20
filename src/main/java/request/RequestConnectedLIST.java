@@ -1,15 +1,14 @@
 package request;
 
-import java.io.DataOutputStream;
 import java.io.File;
-import java.io.OutputStream;
 import java.io.OutputStreamWriter;
-import misc.StringTools;
+
+import data.DataOutputFTP;
 import read.ReadFileCodeTable;
 
 public class RequestConnectedLIST extends RequestConnected {
 
-	private OutputStream output;
+	private DataOutputFTP data;
 	
 	public RequestConnectedLIST(OutputStreamWriter writer, ReadFileCodeTable rfc, boolean connected, String userPath) {
 		super(writer, rfc, connected, userPath);
@@ -30,23 +29,16 @@ public class RequestConnectedLIST extends RequestConnected {
 				f = new File(this.userPath);
 			}
 			if (!f.isDirectory()) {
-				DataOutputStream data = new DataOutputStream(output);
-				data.writeBytes(StringTools.buildFileDescription(f));
+				//data.writeBytes(st.buildFileDescription(f, new GetOwnerFileFactory()));
+				data.writeData(f);
 				data.flush();
 				rfc.printCode(writer, 226);
 				data.close();
 				
 			} else {
-
-				String str = "";
-				System.out.println("Chemin : "+this.userPath);
 				
-				for (File tmp : f.listFiles()) {
-					str+=StringTools.buildFileDescription(tmp);
-				}
-
-				DataOutputStream data = new DataOutputStream(output);
-				data.writeBytes(str);
+				//data.writeBytes(str);
+				data.writeDataDirectory(f);
 				rfc.printCode(writer, 226);
 				data.close();
 			}
@@ -54,8 +46,8 @@ public class RequestConnectedLIST extends RequestConnected {
 		}
 	}
 	
-	public void setDataOutput (OutputStream output) {
-		this.output = output;
+	public void setDataOutput (DataOutputFTP data) {
+		this.data = data;
 	}
 
 }

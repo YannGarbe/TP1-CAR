@@ -4,9 +4,10 @@ import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
 
+import exception.ClosedServerException;
 import exception.PortLesserThan1023Exception;
-import misc.Constantes;
-import thread.ContextClient;
+import factory.ContextClientFactory;
+import misc.globalData;
 
 
 public class Serveur {
@@ -14,23 +15,32 @@ public class Serveur {
 	private int port;
 	private ServerSocket serverSocket;
 	private ServerSocket dataServerSocket;
-	private Socket simpleSocket;
+	private Socket clientSocket;
 	
 	public Serveur () throws Exception {
-		this.port = Constantes.DEFAULT_PORT;
-		this.serverSocket = new ServerSocket(Constantes.DEFAULT_PORT);
-		this.dataServerSocket = new ServerSocket(Constantes.DEFAULT_PORT+1);
-		this.simpleSocket = new Socket();
+		this.port = globalData.used_port;
+		this.serverSocket = new ServerSocket(globalData.used_port);
+		this.dataServerSocket = new ServerSocket(globalData.used_port+1);
+		this.clientSocket = new Socket();
+		
+	}
+	
+	public Serveur (ServerSocket serverSocket) throws Exception {
+		this.port = globalData.used_port;
+		this.serverSocket = serverSocket;
+		this.dataServerSocket = new ServerSocket(globalData.used_port+1);
+		this.clientSocket = new Socket();
 		
 	}
 	
 	public Serveur (int port) throws Exception {
-		if (port <= 1023) {
+		if (port <= 1024) {
 			throw new PortLesserThan1023Exception();
 		}
 		this.port = port;
 		this.serverSocket = new ServerSocket(port);
-		this.simpleSocket = new Socket();
+		this.dataServerSocket = new ServerSocket(globalData.used_port+1);
+		this.clientSocket = new Socket();
 	}
 	
 	public int getPort() {
@@ -38,30 +48,34 @@ public class Serveur {
 	}
 	
 	public void closeServer() throws IOException {
-		this.serverSocket.close();
-		this.simpleSocket.close();
+			if(!this.serverSocket.isClosed()) this.serverSocket.close();
+			this.dataServerSocket.close();
+			if (this.clientSocket != null) this.clientSocket.close();
 	}
 	
-	public void connection() throws IOException {
+	public void connection() throws IOException, ClosedServerException {
 		while(true) {
-			process();
+			process(new ContextClientFactory());
 		}
 	}
+	
 	
 	/**
 	 * Détaille la boucle principale du serveur
 	 * @throws IOException 
+	 * @throws ClosedServerException 
 	 */
-	private void process() throws IOException {
+	public void process(ContextClientFactory contextFac) throws IOException, ClosedServerException {
 		
 		if(!serverSocket.isClosed()) {
 			
-			simpleSocket = serverSocket.accept();
+			clientSocket = serverSocket.accept();
 			
-			new ContextClient(simpleSocket, dataServerSocket);
+			contextFac.createContextClient(clientSocket, dataServerSocket);
 		} else {
 			System.out.println("MESSAGE : Le serveur est fermé");
-			System.exit(0);
+			this.closeServer();
+			throw new ClosedServerException();
 		}
 	}
 }

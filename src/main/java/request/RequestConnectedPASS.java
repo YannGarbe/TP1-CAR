@@ -2,21 +2,21 @@ package request;
 
 import java.io.OutputStreamWriter;
 
-import misc.Constantes;
 import read.ReadFileAuthentification;
 import read.ReadFileCodeTable;
 
 public class RequestConnectedPASS extends RequestConnected{
 
 	private String login;
+	private ReadFileAuthentification ra;
 	
-	public RequestConnectedPASS(OutputStreamWriter writer, ReadFileCodeTable rfc, boolean connected) {
+	public RequestConnectedPASS(OutputStreamWriter writer, ReadFileCodeTable rfc, boolean connected, ReadFileAuthentification ra) {
 		super(writer, rfc, connected, "");
 		login = "";
+		this.ra = ra;
 	}
 	
 	public void process(String cmd) throws Exception {
-		ReadFileAuthentification ra = new ReadFileAuthentification(Constantes.DEFAULT_LOGIN_PATH);
 		if(ra.containsUser(login, cmd)) {
 			connected = true;
 			rfc.printCode(writer, 230);
